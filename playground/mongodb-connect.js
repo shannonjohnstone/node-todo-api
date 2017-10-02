@@ -7,14 +7,12 @@ MongoClient.connect(MONGODB_ADDRESS, (err, db) => {
   if (err) return console.log('Unable to connect to the MongoDB server')
   console.log('Connected to MongoDB server')
 
-  db.collection('Users')
+  db.collection('Todos')
     .insert([
-      { name: 'fox', location: 'otford' },
-      { name: 'ziggy', location: 'otford' },
-      { name: 'emily', location: 'otford' },
-      { name: 'dustin', location: 'otford' },
-      { name: 'lusas', location: 'helensburgh' },
-      { name: 'aiden', location: 'helensburgh' }
+      { name: 'Get milk', completed: false },
+      { name: 'Feed dog', completed: false },
+      { name: 'Go for run', completed: false },
+      { name: 'Book dinner', completed: false },
     ],
     (err, result) => {
       if (err) return console.log('Unable to insert user', err)

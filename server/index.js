@@ -14,6 +14,6 @@ app.use(bodyParser.json())
 
 require('./routes')(app)
 
-app.listen(3000, () => console.log(`Started at http://localhost:${PORT}`))
+app.listen(PORT, () => console.log(`Started at http://localhost:${PORT}`))
 
 module.exports = { app }

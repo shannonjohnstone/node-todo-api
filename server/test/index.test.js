@@ -4,6 +4,7 @@ const { ObjectID } = require('mongodb')
 
 const { app } = require('../index.js')
 const Todo = require('../models/todos')
+const User = require('../models/user')
 const { todos, users, populateTodos, populateUsers } = require('./seed/seed')
 
 beforeEach(populateUsers)
@@ -168,5 +169,40 @@ describe('POST /users', () => {
         expect(res.body.code).toBe(11000)
       })
       .end(done)
+  });
+});
+
+describe('POST /users/login', () => {
+  it('should login user and return token', (done) => {
+    request(app)
+    .post('/users/login')
+    .send({ email: users[1].email, password: users[1].password })
+    .expect(200)
+    .expect(res => {
+      expect(res.headers['x-auth']).toBeTruthy()
+    })
+    .end((err, res) => {
+      if (err) return done(err)
+
+      User.findById(users[1]._id).then((user) => {
+        expect(user.tokens[0].access).toBe('auth')
+        expect(user.tokens[0].token).toBe(res.headers['x-auth'])
+        done()
+      }).catch((err) => done(err))
+    })
+  });
+  it('should return return 400 is user does not exist', (done) => {
+    request(app)
+    .post('/users/login')
+    .send({ email: users[1].email, password: '123456' })
+    .expect(400)
+    .end((err, user) => {
+      if (err) done(err)
+
+      User.findById(users[1]._id).then((user) => {
+        expect(user.tokens.length).toBe(0)
+        done()
+      }).catch((err) => done(err))
+    })
   });
 });

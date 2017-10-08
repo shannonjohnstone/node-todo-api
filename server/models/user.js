@@ -56,6 +56,11 @@ UserSchema.methods.generateAuthToken = function () {
     return user.save().then(() => token)
 }
 
+UserSchema.methods.removeToken = function (token) {
+  const user = this
+  return user.update({ $pull: { tokens: { token } } })
+}
+
 UserSchema.statics.findByToken = function (token) {
   const User = this
   let decoded
@@ -71,6 +76,22 @@ UserSchema.statics.findByToken = function (token) {
     'tokens.token': token,
     'tokens.access': 'auth'
   })
+}
+
+UserSchema.statics.findByCredentials = function (email, password) {
+  const User = this
+
+  return User.findOne({ email })
+    .then((user) => {
+      if (!user) return Promise.reject()
+
+      return new Promise((resolve, reject) => {
+        return bcrypt.compare(password, user.password, (err, isUser) => {
+          if (isUser) return resolve(user)
+          return reject()
+        })
+      })
+    })
 }
 
 UserSchema.pre('save', function (next) {

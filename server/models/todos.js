@@ -5,7 +5,7 @@ const TodoSchema = new Schema({
   text: {
     type: String,
     required: true,
-    minLength: 1,
+    minlength: 1,
     trim: true
   },
   completed: {
@@ -15,6 +15,10 @@ const TodoSchema = new Schema({
   complatedAt: {
     type: Number,
     default: null
+  },
+  _creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
   }
 })
 

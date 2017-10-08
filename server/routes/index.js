@@ -1,8 +1,7 @@
-const { createTodo, getTodos, getTodo, deleteTodo } = require('../controller')
+const todos = require('./todos')
+const users = require('./users')
 
 module.exports = (app) => {
-  app.post('/todos', createTodo)
-  app.get('/todos', getTodos)
-  app.get('/todos/:id', getTodo)
-  app.delete('/todos/:id', deleteTodo)
+  todos(app)
+  users(app)
 }

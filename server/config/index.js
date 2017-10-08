@@ -1,10 +1,11 @@
 const env = process.env.NODE_ENV || 'development'
-console.log(`env ******* ${env}`);
 
-if (env === 'development') {
-  process.env.PORT = 3000
-  process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoApp'
-} else if (env === 'test') {
-  process.env.PORT = 3000
-  process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoApp_test'
+/* config.json
+ * configuration for this project is kept in config.json
+ * this file is not commited to source control
+*/
+
+if (env === 'development' || env === 'test') {
+  const envConfig = require('./config.json')[env]
+  Object.keys(envConfig).forEach(key => process.env[key] = envConfig[key])
 }
